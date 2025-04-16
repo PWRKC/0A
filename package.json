@@ -1,0 +1,9 @@
+{
+  "name": "php-in-subfolder",
+  "scripts": {
+    "start": "php -S 0.0.0.0:3000 -t v"
+  },
+  "engines": {
+    "php": "7.4.x"
+  }
+}
