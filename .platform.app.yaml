@@ -2,11 +2,11 @@ name: myapp
 type: php:8.3
 web:
   locations:
-    "/":  # Serve directly from root
+    "/":
       root: "v"
-      passthru: "/index.php"
+      passthru: "/index.php"  # Ensure PHP processing
       index:
         - index.php
       allow: true
-      scripts: false  # CRITICAL - Disable Platform.sh's PHP handling
+      scripts: true  # CRITICAL - Enables PHP processing
 disk: 1024
