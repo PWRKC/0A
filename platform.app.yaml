@@ -1,21 +1,10 @@
-# platform.app.yaml (main config)
-name: myphpapp
-type: php:8.3  # or 7.4, 8.0, 8.1, 8.2
-runtime:
-  extensions:
-    - apcu
-    - opcache
+name: myapp
+type: php:8.3  # or 7.4
 web:
   locations:
     "/":
-      root: "v"  # Points to your subfolder
-      passthru: "/index.php"  # For front controllers (like Laravel, Symfony, or plain PHP)
+      root: "v"       # Points to your `v/` folder
+      passthru: "/index.php"
       index:
         - index.php
-      allow: true
-  commands:
-    start: |
-      if [ -f .htaccess ]; then
-        cp .htaccess public/  # If using Apache
-      fi
-disk: 1024  # Storage in MB (adjust as needed)
+disk: 1024
