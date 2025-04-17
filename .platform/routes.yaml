@@ -1,5 +1,4 @@
-# Redirect root to /v/ exactly once
+# Correct Platform.sh syntax for redirects
 "https://{default}/":
-  type: redirect
   to: "https://{default}/v/"
-  code: 301
+  type: redirect
