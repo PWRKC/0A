@@ -1,12 +1,41 @@
+# platform.app.yaml - Complete Configuration
 name: myapp
-type: php:8.3
+type: php:8.3  # or 7.4, 8.0, 8.1, 8.2
+runtime:
+  extensions:
+    - apcu
+    - opcache
+
 web:
   locations:
     "/":
       root: "v"
-      passthru: "/index.php"  # Critical for PHP routing
+      passthru: "/index.php"
       index:
         - index.php
       allow: true
-      scripts: false  # Disable auto-PHP handling (let .htaccess manage it)
+      scripts: false  # Critical: Lets .htaccess handle routing
+      rules:
+        # Cache static files
+        \.(css|js|jpg|png|gif|ico|svg|woff2)$:
+          expires: 1d
+          passthru: false
+
+# Disk and resources
 disk: 1024
+mounts:
+  "/v/uploads":
+    source: local
+    source_path: "uploads"
+
+# Optional cron jobs
+crons:
+  cleanup:
+    spec: '0 3 * * *'
+    cmd: "php /app/v/cron.php"
+
+# Environment variables
+variables:
+  env:
+    APP_ENV: production
+    DEBUG: false
