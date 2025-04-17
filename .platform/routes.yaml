@@ -1,4 +1,0 @@
-# Correct Platform.sh syntax for redirects
-"https://{default}/":
-  to: "https://{default}/v/"
-  type: redirect
