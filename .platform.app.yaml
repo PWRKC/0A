@@ -2,11 +2,11 @@ name: myapp
 type: php:8.3
 web:
   locations:
-    "/v":
+    "/":  # Serve directly from root
       root: "v"
-      passthru: false  # Critical - gives full control to your .htaccess
+      passthru: "/index.php"
       index:
         - index.php
       allow: true
-      scripts: true
+      scripts: false  # CRITICAL - Disable Platform.sh's PHP handling
 disk: 1024
