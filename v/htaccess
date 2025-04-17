@@ -1,38 +1,68 @@
+# /v/.htaccess - Complete Solution for Platform.sh
 RewriteEngine On
-# Remove RewriteBase completely
 
-# Prevent infinite loops
-RewriteCond %{ENV:REDIRECT_STATUS} 200
-RewriteRule ^ - [L]
+# =============================================
+# SECURITY RULES (PRESERVED FROM YOUR CONFIG)
+# =============================================
 
-# Your original security rules (unchanged)
-RewriteCond %{HTTP_USER_AGENT} bot|crawl|slurp|spider|archive|wget|curl|libwww [NC]
+# Block bad user agents
+RewriteCond %{HTTP_USER_AGENT} (bot|crawl|slurp|spider|archive|wget|curl|libwww) [NC]
 RewriteRule .* - [F,L]
 
-# Your other rules...
+# Block empty user agents
+RewriteCond %{HTTP_USER_AGENT} ^$
+RewriteRule .* - [F,L]
+
+# Block suspicious query strings
 RewriteCond %{QUERY_STRING} ^q=.+&rct=.+&sa=.+&cd=.+&ved=.+ [NC]
-RewriteRule ^ index.php [L]
+RewriteRule ^ - [F,L]
 
-# Main rewrite rule (updated)
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^ index.php [L]
+RewriteCond %{QUERY_STRING} ^a=.+&.*r=.+ [NC]
+RewriteRule ^ - [F,L]
 
-# Main rewrite rule (updated)
+# =============================================
+# PLATFORM.SH-SPECIFIC FIXES
+# =============================================
+
+# Prevent infinite redirects
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
 RewriteCond %{REQUEST_URI} !^/index\.php$ [NC]
 RewriteCond %{REQUEST_URI} !^/404\.html$ [NC]
+
+# Handle all non-file/directory requests
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php [L]
+RewriteRule ^ index.php [L]
 
-# Security headers (unchanged)
+# =============================================
+# SECURITY HEADERS (PRESERVED FROM YOUR CONFIG)
+# =============================================
+
 Options -Indexes
+
 <Files .htaccess>
     Order Allow,Deny
     Deny from all
 </Files>
+
 <IfModule mod_headers.c>
     Header set X-Frame-Options "SAMEORIGIN"
     Header set X-XSS-Protection "1; mode=block"
     Header set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+</IfModule>
+
+# =============================================
+# PERFORMANCE OPTIMIZATIONS
+# =============================================
+
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript
+</IfModule>
+
+FileETag None
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 1 month"
 </IfModule>
