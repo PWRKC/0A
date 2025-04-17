@@ -1,30 +1,28 @@
 RewriteEngine On
 
-# Platform.sh-specific loop prevention
-RewriteCond %{ENV:REDIRECT_STATUS} ^$
-RewriteCond %{REQUEST_URI} ^/v/(.*)$
-RewriteRule ^(.*)$ /%1 [L]
+# 1. PREVENT INFINITE LOOPS
+RewriteCond %{ENV:REDIRECT_STATUS} 200
+RewriteRule ^ - [L]
 
-# Your original security rules (unchanged)
+# 2. YOUR SECURITY RULES (UNCHANGED)
 RewriteCond %{HTTP_USER_AGENT} bot|crawl|slurp|spider|archive|wget|curl|libwww [NC]
 RewriteRule .* - [F,L]
 RewriteCond %{HTTP_USER_AGENT} ^$
 RewriteRule .* - [F,L]
 
+# 3. QUERY STRING RULES (MODIFIED)
 RewriteCond %{QUERY_STRING} ^q=.+&rct=.+&sa=.+&cd=.+&ved=.+ [NC]
-RewriteRule ^$ index.php [L]
+RewriteRule ^ - [L]
 
 RewriteCond %{QUERY_STRING} ^a=.+&.*r=.+ [NC]
-RewriteRule ^$ index.php [L]
+RewriteRule ^ - [L]
 
-# Main rewrite rule (updated for Platform.sh)
-RewriteCond %{REQUEST_URI} !^/index\.php$ [NC]
-RewriteCond %{REQUEST_URI} !^/404\.html$ [NC]
+# 4. MAIN REWRITE RULE (SIMPLIFIED)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.php [L]
 
-# Your security headers (unchanged)
+# 5. YOUR SECURITY HEADERS (UNCHANGED)
 Options -Indexes
 <Files .htaccess>
     Order Allow,Deny
