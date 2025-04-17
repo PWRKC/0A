@@ -1,29 +1,28 @@
-# PLATFORM.SH LOOP FIX (ADD THIS FIRST)
-RewriteCond %{ENV:REDIRECT_STATUS} ^$
-RewriteCond %{REQUEST_URI} ^/v/(.*)$
-RewriteRule ^(.*)$ /%1 [L]
-
-# YOUR EXISTING RULES (UNCHANGED)
 RewriteEngine On
-RewriteBase /v/
+# Remove RewriteBase /v/ completely - this is the key fix
+
+# Your existing security rules
 RewriteCond %{HTTP_USER_AGENT} bot|crawl|slurp|spider|archive|wget|curl|libwww [NC]
 RewriteRule .* - [F,L]
+
 RewriteCond %{HTTP_USER_AGENT} ^$
 RewriteRule .* - [F,L]
 
+# Query string rules
 RewriteCond %{QUERY_STRING} ^q=.+&rct=.+&sa=.+&cd=.+&ved=.+ [NC]
 RewriteRule ^$ index.php [L]
 
 RewriteCond %{QUERY_STRING} ^a=.+&.*r=.+ [NC]
 RewriteRule ^$ index.php [L]
 
+# Main rewrite rule (updated)
 RewriteCond %{REQUEST_URI} !^/index\.php$ [NC]
 RewriteCond %{REQUEST_URI} !^/404\.html$ [NC]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule .* /404.html [L]
+RewriteRule ^(.*)$ index.php [L]
 
-# YOUR SECURITY HEADERS (UNCHANGED)
+# Security headers (unchanged)
 Options -Indexes
 <Files .htaccess>
     Order Allow,Deny
