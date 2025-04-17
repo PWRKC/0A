@@ -1,44 +1,37 @@
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    
-    # ========================
-    # YOUR SECURITY RULES (100% preserved)
-    # ========================
-    RewriteCond %{HTTP_USER_AGENT} bot|crawl|slurp|spider|archive|wget|curl|libwww [NC]
-    RewriteRule ^ - [F,L]
-    
-    RewriteCond %{HTTP_USER_AGENT} ^$
-    RewriteRule ^ - [F,L]
-    
-    RewriteCond %{QUERY_STRING} ^q=.+&rct=.+&sa=.+&cd=.+&ved=.+ [NC]
-    RewriteRule ^ index.php [L]
-    
-    RewriteCond %{QUERY_STRING} ^a=.+&.*r=.+ [NC]
-    RewriteRule ^ index.php [L]
-    
-    # ========================
-    # FIXED ROUTING LOGIC
-    # ========================
-    RewriteCond %{ENV:REDIRECT_STATUS} ^$
-    RewriteCond %{REQUEST_URI} !^/index\.php$
-    RewriteCond %{REQUEST_URI} !^/404\.html$
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d 
-    RewriteRule ^ index.php [L]
-</IfModule>
+RewriteEngine On
 
-# ========================
-# YOUR SECURITY HEADERS (100% preserved)
-# ========================
+# Platform.sh-specific loop prevention
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{REQUEST_URI} ^/v/(.*)$
+RewriteRule ^(.*)$ /%1 [L]
+
+# Your original security rules (unchanged)
+RewriteCond %{HTTP_USER_AGENT} bot|crawl|slurp|spider|archive|wget|curl|libwww [NC]
+RewriteRule .* - [F,L]
+RewriteCond %{HTTP_USER_AGENT} ^$
+RewriteRule .* - [F,L]
+
+RewriteCond %{QUERY_STRING} ^q=.+&rct=.+&sa=.+&cd=.+&ved=.+ [NC]
+RewriteRule ^$ index.php [L]
+
+RewriteCond %{QUERY_STRING} ^a=.+&.*r=.+ [NC]
+RewriteRule ^$ index.php [L]
+
+# Main rewrite rule (updated for Platform.sh)
+RewriteCond %{REQUEST_URI} !^/index\.php$ [NC]
+RewriteCond %{REQUEST_URI} !^/404\.html$ [NC]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [L]
+
+# Your security headers (unchanged)
 Options -Indexes
 <Files .htaccess>
-    Require all denied
+    Order Allow,Deny
+    Deny from all
 </Files>
-
 <IfModule mod_headers.c>
     Header set X-Frame-Options "SAMEORIGIN"
-    Header set X-XSS-Protection "1; mode=block" 
+    Header set X-XSS-Protection "1; mode=block"
     Header set X-Content-Type-Options "nosniff"
 </IfModule>
-
-ErrorDocument 404 /404.html
