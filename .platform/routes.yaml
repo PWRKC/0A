@@ -1,3 +1,5 @@
+# Redirect root to /v/ exactly once
 "https://{default}/":
   type: redirect
-  to: "https://{default}/index.php"
+  to: "https://{default}/v/"
+  code: 301
