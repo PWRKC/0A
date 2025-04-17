@@ -2,14 +2,11 @@ name: myapp
 type: php:8.3
 web:
   locations:
-    "/v":
+    "/":  # Serve directly from root
       root: "v"
-      passthru: "/v/index.php"
+      passthru: "/index.php"
       index:
         - index.php
       allow: true
       scripts: true
-    "/":
-      passthru: false
-
 disk: 1024
