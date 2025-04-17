@@ -1,11 +1,12 @@
-# Minimum config for your v/ folder setup
 name: myapp
-type: php:8.3  # Or 7.4, 8.0, 8.1, 8.2
+type: php:8.3
 web:
   locations:
     "/":
-      root: "v"          # Points to your v/ folder
-      passthru: "/index.php"  # Front controller
+      root: "v"
+      passthru: "/index.php"  # Critical for PHP routing
       index:
         - index.php
-disk: 1024  # Storage in MB (adjust as needed)
+      allow: true
+      scripts: false  # Disable auto-PHP handling (let .htaccess manage it)
+disk: 1024
