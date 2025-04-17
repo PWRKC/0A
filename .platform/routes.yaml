@@ -1,1 +1,4 @@
-
+# Redirect root to /v/ if needed
+"https://{default}/":
+  type: redirect
+  to: "https://{default}/v/"
