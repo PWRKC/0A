@@ -2,9 +2,9 @@ name: myapp
 type: php:8.3
 web:
   locations:
-    "/":  # Serve from root
+    "/":
       root: "v"
-      passthru: "/index.php"
+      passthru: false  # Critical change
       index:
         - index.php
       allow: true
