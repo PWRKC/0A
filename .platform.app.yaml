@@ -4,9 +4,9 @@ web:
   locations:
     "/":
       root: "v"
-      passthru: false  # Critical change
+      passthru: "/index.php"
       index:
         - index.php
       allow: true
-      scripts: true
+      scripts: false  # CRITICAL - Disables Platform.sh's PHP handling
 disk: 1024
