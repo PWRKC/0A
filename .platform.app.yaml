@@ -2,16 +2,21 @@ name: myapp
 type: php:8.3
 web:
   locations:
-    "/v":  # Explicit /v endpoint
+    "/v":
       root: "v"
-      passthru: "/v/index.php"  # Full path
+      passthru: "/v/index.php"
       index:
         - index.php
       allow: true
       scripts: true
-    "/":    # Redirect root to /v
+    
+    # Correct way to redirect root to /v/
+    "/":
       passthru: false
-      redirect:
-        code: 301
-        to: "/v/"
+      rules:
+        ".*":
+          type: redirect
+          to: "/v/"
+          code: 301
+
 disk: 1024
