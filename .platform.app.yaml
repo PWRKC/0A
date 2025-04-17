@@ -2,9 +2,9 @@ name: myapp
 type: php:8.3
 web:
   locations:
-    "/v":  # Explicit /v endpoint
+    "/v":
       root: "v"
-      passthru: false  # Critical - hands control to your .htaccess
+      passthru: false  # Critical - gives full control to your .htaccess
       index:
         - index.php
       allow: true
