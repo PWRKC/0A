@@ -10,13 +10,9 @@ web:
       allow: true
       scripts: true
     
-    # Correct way to redirect root to /v/
+    
     "/":
       passthru: false
-      rules:
-        ".*":
-          type: redirect
-          to: "/v/"
-          code: 301
+      to: "/v/"  
 
 disk: 1024
