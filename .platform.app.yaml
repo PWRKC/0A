@@ -9,10 +9,7 @@ web:
         - index.php
       allow: true
       scripts: true
-    
-    
     "/":
       passthru: false
-      to: "/v/"  
 
 disk: 1024
