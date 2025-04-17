@@ -1,5 +1,11 @@
+# PLATFORM.SH LOOP FIX (ADD THIS FIRST)
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{REQUEST_URI} ^/v/(.*)$
+RewriteRule ^(.*)$ /%1 [L]
+
+# YOUR EXISTING RULES (UNCHANGED)
 RewriteEngine On
-RewriteBase /v/  # Critical: Set base to /v/
+RewriteBase /v/
 RewriteCond %{HTTP_USER_AGENT} bot|crawl|slurp|spider|archive|wget|curl|libwww [NC]
 RewriteRule .* - [F,L]
 RewriteCond %{HTTP_USER_AGENT} ^$
@@ -17,6 +23,7 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule .* /404.html [L]
 
+# YOUR SECURITY HEADERS (UNCHANGED)
 Options -Indexes
 <Files .htaccess>
     Order Allow,Deny
